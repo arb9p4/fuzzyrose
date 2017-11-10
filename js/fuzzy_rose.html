@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+        
+        #debug {
+            position: absolute;
+            background-color: #fff;
+            font-family: monospace;
+            padding: 5px;
+            opacity: 0.5;
+        }
+        
+        #canvas {
+            background-color: #333;
+        }
+    </style>
+    <script src="libs/jquery-1.11.0.min.js"></script>
+    <script src="libs/tweenjs-0.4.1.min.js"></script>
+    <script src="libs/easeljs-0.7.1.min.js"></script>
+    <script src="FuzzyRose.js"></script>
+    <script>
+        
+        var app = (function() {
+        
+            var pub = {};
+            
+            var stage;
+            var mouse = {x: 0, y: 0};
+            var timer = 0;
+            
+            var N = 12;
+            var maxVal = 400;
+            var interval = 100;
+            
+            var params1, params2;
+            
+            pub.init = function() {
+                // create EaselJS stage
+                stage = new createjs.Stage("canvas");
+                
+                stage.canvas.width = $(window).width();
+                stage.canvas.height = $(window).height();
+                
+                
+                
+                params1 = [];
+                for (var i = 0; i < N; i++) {
+                    var p = [];
+                    for (var j = 0; j < 4; j++) {
+                        p.push(Math.random()*maxVal);
+                    }
+                    
+                    if(Math.random() > 0.5) {
+                        p[1] = p[0];
+                    }
+                    if(Math.random() > 0.5) {
+                        p[2] = p[0];
+                    }
+                    if(Math.random() > 0.5) {
+                        p[3] = p[0];
+                    }
+                    
+                    p.sort(function(a,b){return a-b});
+                    params1.push(p);
+                }
+                
+                params2 = [];
+                for (var i = 0; i < N; i++) {
+                    var p = [];
+                    for (var j = 0; j < 4; j++) {
+                        p.push(Math.random()*maxVal);
+                    }
+                    
+                    if(Math.random() > 0.5) {
+                        p[1] = p[0];
+                    }
+                    if(Math.random() > 0.5) {
+                        p[2] = p[0];
+                    }
+                    if(Math.random() > 0.5) {
+                        p[3] = p[0];
+                    }
+                    
+                    p.sort(function(a,b){return a-b});
+                    params2.push(p);
+                }
+                
+                //Register mouse listeners
+                stage.addEventListener("stagemousemove", function(evt) {
+                    mouse.x = evt.stageX;
+                    mouse.y = evt.stageY;
+                });
+    
+                //Create animation timer
+                createjs.Ticker.setFPS(30);
+                createjs.Ticker.addEventListener("tick", tick);
+            };
+            
+            // Update every frame
+            function tick() {
+    
+                timer++;
+                
+                stage.removeAllChildren();
+                
+                var alpha = timer/interval;
+                var params = [];
+                for (var i = 0; i < N; i++) {
+                    var p = [];
+                    for (var j = 0; j < 4; j++) {
+                        p.push((1-alpha)*params1[i][j] + alpha*params2[i][j]);
+                    }
+                    params.push(p);
+                }
+
+                
+                var fr = stage.addChild(new FuzzyRose(params));
+                fr.x = mouse.x;
+                fr.y = mouse.y;
+                
+                
+                if (timer == interval) {
+                    
+                    timer = 0;
+                    
+                    // Create new parameters
+                    for (var i = 0; i < N; i++) {
+                        params1[i] = [];
+                        for (var j = 0; j < 4; j++) {
+                            params1[i].push(params2[i][j]);
+                        }
+                    }
+                    
+                    params2 = [];
+                    for (var i = 0; i < N; i++) {
+                        var p = [];
+                        for (var j = 0; j < 4; j++) {
+                            p.push(Math.random()*maxVal);
+                        }
+                        
+                        if(Math.random() > 0.5) {
+                            p[1] = p[0];
+                        }
+                        if(Math.random() > 0.5) {
+                            p[2] = p[0];
+                        }
+                        if(Math.random() > 0.5) {
+                            p[3] = p[0];
+                        }
+                        
+                        p.sort(function(a,b){return a-b});
+                        params2.push(p);
+                    }
+                    
+                }
+                
+                
+                stage.update();
+                
+                $("#debug").html(timer + " (" + mouse.x + "," + mouse.y + ")");
+    
+            } 
+            
+            return pub;
+        })();
+              
+        
+        $(function() {
+            app.init();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="debug"></div>
+    <canvas id="canvas" height="100" width="100" oncontextmenu="return false;">This browser is unsupported.</canvas>
+</body>
+
+</html>
