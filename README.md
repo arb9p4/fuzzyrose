@@ -1,4 +1,4 @@
-# fuzzyrose
+# Fuzzy Rose Plot
 
 ![Fuzzy Rose Diagram](/fuzzyrose.png)
 
