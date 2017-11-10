@@ -1,5 +1,7 @@
 # fuzzyrose
 
+![Fuzzy Rose Diagram](/fuzzyrose.png)
+
 This library includes functions for plotting fuzzy rose diagrams in Matlab. Fuzzy rose diagrams are a compact visual representation to show vectors of fuzzy numbers. Each component of the vector is represented as a petal on a circular diagram. The size of each petal is proportional to the size of the corresponding value and the shape of the petal indicates the range of uncertainty. For more details see the following paper.
 
 [A. R. Buck and J. M. Keller, "Visualizing uncertainty with fuzzy rose diagrams," in 2014 IEEE Symposium on Computational Intelligence for Engineering Solutions (CIES), Orlando, FL, 2014, pp. 30-36.](https://doi.org/10.1109/CIES.2014.7011827)
